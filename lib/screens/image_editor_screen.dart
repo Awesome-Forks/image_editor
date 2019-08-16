@@ -3,6 +3,7 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:screenshot/screenshot.dart';
 import 'saved_image.dart';
+import 'package:dio/dio.dart';
 
 class ImageEditorScreen extends StatefulWidget {
   @override
@@ -20,6 +21,7 @@ class _ImageEditorScreenState extends State<ImageEditorScreen> {
   SelectedMode selectedMode = SelectedMode.StrokeWidth;
   File _imageFile;
   ScreenshotController _screenshotController = ScreenshotController();
+  Dio dio = new Dio();
   //Create an instance of ScreenshotController
 
   @override
@@ -43,6 +45,7 @@ class _ImageEditorScreenState extends State<ImageEditorScreen> {
           child: Text('Save'),
           onPressed: () async {
             await _getScreenshot();
+            await _postChange();
             Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -112,6 +115,13 @@ class _ImageEditorScreenState extends State<ImageEditorScreen> {
     }).catchError((onError) {
       print(onError);
     });
+  }
+
+  _postChange() async {
+    FormData formData = new FormData.from({
+      "image[image]": new UploadFileInfo(_imageFile, _imageFile.path),
+    });
+    await dio.put("http://192.168.0.2:3000/images/1", data: formData);
   }
 
   void _clearPoints() {

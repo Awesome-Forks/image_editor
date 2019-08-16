@@ -29,9 +29,8 @@ dev_dependencies:
     sdk: flutter
   flutter_colorpicker: any
   path_provider: ^1.2.0
-  simple_permissions: any
   screenshot: ^0.1.1
-  image_gallery_saver: ^1.0.0
+  dio: 2.1.13
 
 
 
